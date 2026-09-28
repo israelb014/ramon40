@@ -70,6 +70,8 @@ func _process(delta: float) -> void:
 		b.sync_visual(delta * speed)
 	shot_time += delta
 	_update_camera(delta)
+	for fx in race._post_fx:
+		fx.update_fx(absf(_focus_bike().physics.speed) * 0.6 if shot == Shot.CHASE or shot == Shot.ONBOARD else 0.0, false, delta)
 	Audio.update_replay(race, focus, delta)
 
 
@@ -169,7 +171,7 @@ class _ReplayOverlay extends Control:
 	var player: ReplayPlayer
 
 	func _ready() -> void:
-		set_anchors_preset(Control.PRESET_FULL_RECT)
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	func _process(_d: float) -> void:

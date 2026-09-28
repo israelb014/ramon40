@@ -14,6 +14,7 @@ var shake := 0.0
 var own_layer := 0 ## render layer holding the followed rider's head (hidden in helmet view)
 
 var _pos := Vector3.ZERO
+var _offset := Vector3.ZERO
 var _look := Vector3.ZERO
 var _yaw := 0.0
 var _fov := 70.0
@@ -67,6 +68,7 @@ func update_camera(delta: float) -> void:
 	if not _initialized:
 		_yaw = yaw_target
 		_pos = bike_pos - fwd * 5.0 + Vector3.UP * 2.0
+		_offset = Vector3.ZERO
 		_look = bike_pos
 		_fov = fov_target
 		_initialized = true
@@ -108,9 +110,13 @@ func _chase(delta: float, fov_target: float, fwd: Vector3, yaw_target: float, bi
 		if absf(float(proj["lateral"])) > target.track.half_width + target.track.shoulder:
 			g = maxf(g, target.track.terrain_height(desired.x, desired.z))
 		desired.y = maxf(desired.y, g + 0.6)
-	_pos = _pos.lerp(desired, clampf(delta * 10.0, 0.0, 1.0))
+	# Smooth the offset relative to the bike (not the absolute position) so the camera never
+	# falls behind at speed.
+	var off := desired - bike_pos
+	_offset = _offset.lerp(off, clampf(delta * 8.0, 0.0, 1.0)) if _offset != Vector3.ZERO else off
+	_pos = bike_pos + _offset
 	var look_target := bike_pos + Vector3.UP * (0.95 if mode == Mode.CHASE else 0.85) + cam_fwd * 2.5
-	_look = _look.lerp(look_target, clampf(delta * 14.0, 0.0, 1.0))
+	_look = look_target
 	var shake_off := _shake_offset()
 	global_position = _pos + shake_off
 	look_at(_look + shake_off * 0.5, Vector3.UP)

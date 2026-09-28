@@ -205,7 +205,7 @@ func _setup_views() -> void:
 	add_child(layer)
 	_split_layer = layer
 	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	box.add_theme_constant_override("separation", 4)
 	layer.add_child(box)
 	for i in n:

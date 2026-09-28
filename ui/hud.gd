@@ -23,7 +23,7 @@ var compact := false ## split-screen: smaller layout
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rtl = Settings.is_rtl()
 	show_minimap = bool(Settings.get_value("show_minimap", true))
@@ -144,7 +144,7 @@ func _draw_race_info(s: float) -> void:
 	var pad := 30.0 * s
 	# Position
 	var pos_text := "%d" % int(state.get("position", 1))
-	var total_text := "/%d" % int(state.get("total", 1))
+	var total_text := "\u200e/%d" % int(state.get("total", 1))
 	var px := card.position.x + (card.size.x - pad if rtl else pad)
 	var big := int(120 * s)
 	var small := int(46 * s)
@@ -173,9 +173,9 @@ func _draw_race_info(s: float) -> void:
 	_draw_clock_icon(Vector2(px - 12.0 * s if rtl else px + 12.0 * s, ty - 10.0 * s), 12.0 * s)
 	var tx := px - 36.0 * s if rtl else px + 36.0 * s
 	_text_aligned(UITheme.body_font(700), cur, Vector2(tx, ty), int(34 * s), UITheme.TEXT, true)
-	var bx := lx
 	var best_label := tr("HUD_BEST") + "  " + best
-	_text_aligned(bf, best_label, Vector2(bx, ty), int(26 * s), UITheme.GOLD, false, not rtl)
+	var bw := bf.get_string_size(best_label, HORIZONTAL_ALIGNMENT_LEFT, -1, int(26 * s)).x
+	draw_string(bf, Vector2(lx if rtl else lx - bw, ty), best_label, HORIZONTAL_ALIGNMENT_LEFT, -1, int(26 * s), UITheme.GOLD)
 	# Gap / last lap delta.
 	var delta_text: String = state.get("delta_text", "")
 	if delta_text != "":

@@ -39,8 +39,8 @@ func setup(p_bike: Bike) -> void:
 	var style := bike.track.style.style if bike.track else "ramon"
 	_dust_color = {"ramon": Color(0.82, 0.55, 0.40), "deadsea": Color(0.88, 0.84, 0.74), "jerusalem": Color(0.62, 0.52, 0.42)}.get(style, Color(0.8, 0.7, 0.6))
 	var mult := 1.0 if _quality >= 2 else 0.5
-	dust = _make_puffs(int(48 * mult), 1.6, _dust_color, 2.2, 0.9)
-	smoke = _make_puffs(int(40 * mult), 1.3, Color(0.85, 0.85, 0.88), 1.6, 0.6)
+	dust = _make_puffs(int(40 * mult), 1.4, _dust_color, 1.5, 0.7)
+	smoke = _make_puffs(int(32 * mult), 1.1, Color(0.85, 0.85, 0.88), 1.1, 0.45)
 	sparks = _make_sparks(int(60 * mult))
 	for p in [dust, smoke, sparks]:
 		add_child(p)
@@ -143,7 +143,7 @@ func _process(_delta: float) -> void:
 	var crashed := ph.is_crashed
 	var offroad := ph.surface != BikePhysics.Surface.ASPHALT
 	dust.emitting = (offroad and speed > 4.0) or (crashed and offroad and ph.vel.length() > 2.0)
-	var sliding := ph.slip > 1.6 or (ph.rear_locked and speed > 6.0) or (ph.wheelspin > 0.25 and speed > 2.0)
+	var sliding := ph.slip > 1.8 or (ph.rear_locked and speed > 6.0) or (ph.wheelspin > 0.35 and speed > 3.0)
 	smoke.emitting = sliding and not offroad and not crashed
 	sparks.emitting = crashed and not offroad and ph.vel.length() > 3.0
 	if sparks.emitting:

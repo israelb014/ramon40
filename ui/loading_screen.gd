@@ -21,14 +21,14 @@ func _ready() -> void:
 	_track_id = cfg.get("track", "ramon")
 	var art := TrackArt.new()
 	art.track_id = _track_id
-	art.set_anchors_preset(Control.PRESET_FULL_RECT)
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(art)
 	var shade := ColorRect.new()
 	shade.color = Color(0.03, 0.02, 0.04, 0.25)
-	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 80)
 	add_child(margin)

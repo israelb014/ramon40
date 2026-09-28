@@ -7,15 +7,15 @@ var _buttons: Array = []
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = UITheme.theme()
 	Widgets.apply_direction(self)
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.02, 0.04, 0.55)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 70)
 	add_child(margin)
@@ -45,6 +45,8 @@ func _ready() -> void:
 		var time_text := GameData.format_time(r["time"]) if i == 0 else ("+" + _gap(r["time"] - winner_time))
 		if r.get("estimated", false):
 			time_text = tr("RESULTS_DNF") if race.config.get("mode", "") == "time_trial" else "~" + time_text
+		# Keep numeric strings left-to-right inside the RTL layout.
+		time_text = "\u200e" + time_text + "\u200e"
 		var row := _row(["%d" % r["position"], r["name"], tr(GameData.bike(r["bike"])["name"]), time_text, GameData.format_time(r["best_lap"])], false, r["is_player"], i)
 		tv.add_child(row)
 		Widgets.animate_in(row, 0.05 * i)

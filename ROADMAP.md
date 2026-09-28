@@ -2,7 +2,7 @@
 
 Resume rule: read this file and DECISIONS.md, then continue from the first unchecked item.
 
-- [ ] 1. Project setup, Godot download, CI pipeline with tests and exports working.
+- [x] 1. Project setup, Godot download, CI pipeline with tests and exports working.
 - [ ] 2. Track generation system plus the Ramon track, playable with one bike.
 - [ ] 3. Bike physics, rider, cameras and HUD.
 - [ ] 4. AI opponents and full race flow (countdown, laps, results).
