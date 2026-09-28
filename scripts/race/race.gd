@@ -54,7 +54,18 @@ func _ready() -> void:
 		_setup_ghost()
 	state = State.INTRO
 	state_time = 0.0
+	add_to_group("quality_listeners")
 	Audio.race_started(self)
+
+
+func apply_quality_settings() -> void:
+	EnvironmentBuilder.apply_quality(world.environment_node.environment, world.sun)
+	if _viewports.is_empty():
+		EnvironmentBuilder.apply_viewport_quality(get_viewport())
+	for vp in _viewports:
+		EnvironmentBuilder.apply_viewport_quality(vp)
+	for h in huds:
+		h.show_minimap = bool(Settings.get_value("show_minimap", true))
 
 
 # --- Setup -------------------------------------------------------------------
@@ -76,8 +87,8 @@ func _player_colors(p: Dictionary) -> Dictionary:
 	var paint_sel: Dictionary = Save.get_paint(bike_id)
 	var suit: Dictionary = Save.progress.get("suit", {"main": 2, "accent": 0})
 	return {
-		"paint": GameData.paint_color(int(p.get("paint", paint_sel.get("body", 0)))),
-		"accent": GameData.paint_color(int(p.get("accent", paint_sel.get("accent", 10)))),
+		"paint": GameData.paint_color(int(p.get("paint", paint_sel["body"]))),
+		"accent": GameData.paint_color(int(p.get("accent", paint_sel["accent"]))),
 		"suit_main": GameData.paint_color(int(p.get("suit_main", suit.get("main", 2)))),
 		"suit_accent": GameData.paint_color(int(p.get("suit_accent", suit.get("accent", 0)))),
 		"helmet": Color(0.95, 0.95, 0.95),
@@ -148,6 +159,8 @@ func _spawn_bikes() -> void:
 			"helmet": Color.from_hsv(rng.randf(), 0.5, 0.95),
 		}
 		var slot: int = ai_slots[k] if k < ai_slots.size() else idx
+		if config.has("ai_grid") and k < config["ai_grid"].size():
+			slot = int(config["ai_grid"][k])
 		var b3 := _make_bike(idx, bike_id, colors, slot)
 		b3.rider_name = config["ai_names"][k] if config.has("ai_names") else GameData.rider_name(k)
 		var ai := AIController.new(line, GameData.bike(bike_id), difficulty, 1000 + k * 17)
@@ -464,6 +477,12 @@ func _build_results() -> Array:
 func _apply_race_rewards() -> void:
 	if config.get("mode", "") in ["online"]:
 		return
+	if config.get("mode", "") == "championship":
+		var st: Dictionary = Save.progress.get("championship", {})
+		if not st.is_empty() and st.get("active", false):
+			var summary := Championship.apply_results(st, results)
+			Championship.grant_rewards(st, int(summary["player_position"]), Save)
+			st["last_round"] = {"track": track.id, "results": _compact_results()}
 	for r in results:
 		if not r["is_player"]:
 			continue
@@ -473,6 +492,13 @@ func _apply_race_rewards() -> void:
 		if not r["estimated"]:
 			Save.submit_race(track.id, r["time"], r["bike"], progress.total_laps)
 	Save.save_progress()
+
+
+func _compact_results() -> Array:
+	var out := []
+	for r in results:
+		out.append({"index": r["index"], "position": r["position"], "time": r["time"]})
+	return out
 
 
 func _show_results() -> void:

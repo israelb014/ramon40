@@ -125,10 +125,15 @@ func unlock_next_color() -> int:
 	return -1
 
 
+const DEFAULT_PAINT := {"sport": 0, "naked": 5, "supermoto": 1, "cafe": 9}
+
+
+## Paint of a bike ({"body": idx, "accent": idx}); defaults when never customised.
 func get_paint(bike_id: String) -> Dictionary:
 	if progress["paint"].has(bike_id):
-		return progress["paint"][bike_id]
-	return {}
+		var p: Dictionary = progress["paint"][bike_id]
+		return {"body": int(p.get("body", 0)), "accent": int(p.get("accent", 10))}
+	return {"body": int(DEFAULT_PAINT.get(bike_id, 0)), "accent": 10}
 
 
 func set_paint(bike_id: String, body: int, accent: int) -> void:

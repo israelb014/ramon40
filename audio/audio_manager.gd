@@ -52,3 +52,7 @@ func update_replay(_race: Node, _focus: int, _delta: float) -> void:
 
 func menu_music_fade_out() -> void:
 	pass
+
+
+func play_menu_music() -> void:
+	pass

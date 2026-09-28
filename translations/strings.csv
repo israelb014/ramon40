@@ -74,3 +74,139 @@ TIP_6,במצב מרוץ נגד השעון רוח הרפאים של ההקפה ה
 TIP_7,נפלת? האופנוע יחזור לכביש תוך שניות. אפשר גם ללחוץ על חזרה למסלול.,Crashed? You will be back on the road in seconds. You can also press respawn.
 TIP_8,סיים אליפות כדי לפתוח אופנועים וצבעים חדשים במוסך.,Finish a championship to unlock new bikes and colors in the garage.
 MENU_SETTINGS,הגדרות,Settings
+MENU_TAGLINE,מרוץ אופנועים בכבישים היפים של ישראל,Motorcycle racing on Israel's most beautiful roads
+MENU_QUICK_RACE,מרוץ מהיר,Quick Race
+MENU_CHAMPIONSHIP,אליפות,Championship
+MENU_TIME_TRIAL,נגד השעון,Time Trial
+MENU_SPLIT,מסך מפוצל,Split Screen
+MENU_ONLINE,רשת ואונליין,LAN and Online
+MENU_GARAGE,מוסך,Garage
+MENU_QUIT,יציאה,Quit
+MENU_CREDITS,קרדיטים,Credits
+MENU_HINT,אישור: בחירה  ·  חזרה: Esc / B,Confirm: select  ·  Back: Esc / B
+ON,פועל,On
+OFF,כבוי,Off
+LOCKED,נעול,Locked
+PLAYER_1,שחקן 1,Player 1
+PLAYER_2,שחקן 2,Player 2
+SETUP_QUICK_SUB,מרוץ אחד מול שבעה יריבים,One race against seven rivals
+SETUP_TT_SUB,לבד על הכביש מול רוח הרפאים של ההקפה הטובה שלך,Alone on the road against the ghost of your best lap
+SETUP_SPLIT_SUB,שני שחקנים על מסך אחד,Two players on one screen
+SETUP_TRACK,מסלול,Track
+SETUP_BIKE,אופנוע,Bike
+SETUP_BIKE_P1,אופנוע שחקן 1,Player 1 bike
+SETUP_BIKE_P2,אופנוע שחקן 2,Player 2 bike
+SETUP_LAPS,הקפות,Laps
+SETUP_DIFFICULTY,רמת קושי,Difficulty
+SETUP_OPPONENTS,יריבים ממוחשבים,AI opponents
+SETUP_GHOST,רוח רפאים,Ghost
+SETUP_START,יוצאים לדרך,Start race
+SETUP_LOCKED_BIKE,האופנוע נעול,Bike locked
+SETUP_NO_RECORD,עוד אין שיא במסלול הזה,No record on this track yet
+SETUP_SPLIT_NOTE,שחקן 1: מקשי WASD או בקר ראשון. שחקן 2: חצים או בקר שני.,Player 1: WASD keys or first gamepad. Player 2: arrow keys or second gamepad.
+STAT_SPEED,מהירות,Top speed
+STAT_ACCEL,תאוצה,Acceleration
+STAT_HANDLING,יציבות בפניות,Handling
+STAT_BRAKING,בלימה,Braking
+CHAMP_SUB,"שלושה מסלולים, שמונה רוכבים, אלוף אחד","Three tracks, eight riders, one champion"
+CHAMP_RULES,"נקודות לפי מקום: 25, 18, 15, 12, 10, 8, 6, 4. עלייה לפודיום פותחת צבע חדש. סיום אליפות פותח את אופנוע הספורט, וזכייה פותחת את הקפה רייסר וצבע הזהב.","Points by position: 25, 18, 15, 12, 10, 8, 6, 4. A podium unlocks a new color. Completing a championship unlocks the sport bike; winning it unlocks the cafe racer and champion gold."
+CHAMP_START,פתח אליפות,Start championship
+CHAMP_STANDINGS,טבלת האליפות,Standings
+CHAMP_FINAL,הטבלה הסופית,Final standings
+CHAMP_AFTER_N,אחרי סיבוב %d מתוך 3,After round %d of 3
+CHAMP_ROUND_N,סיבוב %d,Round %d
+CHAMP_RACE_ROUND,לסיבוב %d,Race round %d
+CHAMP_ABANDON,נטוש אליפות,Abandon championship
+CHAMP_NEW,אליפות חדשה,New championship
+CHAMP_POINTS,נק׳,Pts
+CHAMP_CHAMPION,אלוף!,Champion!
+CHAMP_COMPLETE,האליפות הסתיימה,Championship complete
+REWARD_BIKE,נפתח אופנוע: %s,Bike unlocked: %s
+REWARD_COLOR,נפתח צבע: %s,Color unlocked: %s
+GARAGE_SUB,"בחר אופנוע, צבע וחליפת רכיבה","Pick your bike, paint and riding suit"
+GARAGE_BODY,צבע גוף,Body
+GARAGE_ACCENT,צבע משני,Accent
+GARAGE_SUIT,חליפה,Suit
+GARAGE_SUIT_ACCENT,פסים,Stripes
+GARAGE_HINT,גרור עם העכבר או Q / E כדי לסובב את האופנוע,Drag with the mouse or use Q / E to turn the bike
+GARAGE_LOCKED_SPORT,נפתח בסיום אליפות,Unlocks by completing a championship
+GARAGE_LOCKED_CAFE,נפתח בזכייה באליפות,Unlocks by winning a championship
+GARAGE_LOCKED_NAKED,נעול,Locked
+GARAGE_LOCKED_SUPERMOTO,נעול,Locked
+SET_GRAPHICS,גרפיקה,Graphics
+SET_DISPLAY,תצוגה,Display
+SET_AUDIO,שמע,Audio
+SET_CONTROLS,שליטה,Controls
+SET_LANGUAGE,שפה,Language
+SET_PRESET,איכות כללית,Quality preset
+PRESET_LOW,נמוכה,Low
+PRESET_MEDIUM,בינונית,Medium
+PRESET_HIGH,גבוהה,High
+PRESET_ULTRA,אולטרה,Ultra
+PRESET_CUSTOM,מותאמת אישית,Custom
+Q_LOW,נמוך,Low
+Q_MEDIUM,בינוני,Medium
+Q_HIGH,גבוה,High
+Q_ULTRA,אולטרה,Ultra
+SET_LIGHTING,תאורה,Lighting
+SET_SHADOWS,צללים,Shadows
+SET_SSAO,הצללה סביבתית (SSAO),Ambient occlusion (SSAO)
+SET_SSIL,תאורה עקיפה (SSIL),Indirect light (SSIL)
+SET_SDFGI,תאורה גלובלית (SDFGI),Global illumination (SDFGI)
+SET_VOLFOG,ערפל נפחי,Volumetric fog
+SET_GLOW,זוהר,Glow
+SET_EFFECTS,אפקטים,Effects
+SET_MOTION_BLUR,טשטוש תנועה,Motion blur
+SET_HEAT_HAZE,אדי חום,Heat haze
+SET_PARTICLES,חלקיקים,Particles
+SET_IMAGE,תמונה,Image
+SET_AA,החלקת קצוות,Anti-aliasing
+SET_RENDER_SCALE,רזולוציית רינדור,Render scale
+SET_DRAW_DISTANCE,טווח ראייה,Draw distance
+SET_VEGETATION,צמחייה,Vegetation
+SET_RESTART_NOTE,טווח ראייה וצמחייה ישתנו במרוץ הבא.,Draw distance and vegetation apply from the next race.
+SET_WINDOW,מצב חלון,Window mode
+WIN_FULLSCREEN,מסך מלא,Fullscreen
+WIN_EXCLUSIVE,מסך מלא בלעדי,Exclusive fullscreen
+WIN_WINDOWED,חלון,Windowed
+SET_RESOLUTION,רזולוציית חלון,Window resolution
+SET_VSYNC,סנכרון אנכי,V-Sync
+SET_FPS_CAP,הגבלת פריימים,FPS cap
+FPS_UNLIMITED,ללא הגבלה,Unlimited
+SET_HUD,ממשק,HUD
+SET_MINIMAP,מפה קטנה,Minimap
+SET_UNITS,יחידות מהירות,Speed units
+SET_CAMERA,מצלמה,Camera
+CAM_CHASE,מרדף,Chase
+CAM_CLOSE,מרדף קרוב,Close chase
+CAM_HELMET,קסדה,Helmet
+SET_VOL_MASTER,עוצמה ראשית,Master volume
+SET_VOL_MUSIC,מוזיקה,Music
+SET_VOL_SFX,אפקטים,Effects
+SET_VOL_ENGINE,מנועים,Engines
+SET_VOL_UI,ממשק,Interface
+SET_PLAYER,שחקן,Player
+SET_ACTION,פעולה,Action
+SET_KEYBOARD,מקלדת,Keyboard
+SET_GAMEPAD,בקר,Gamepad
+SET_PRESS_KEY,לחץ על מקש...,Press a key...
+SET_PRESS_BUTTON,לחץ על כפתור...,Press a button...
+SET_RESET_CONTROLS,שחזר ברירת מחדל,Reset to defaults
+SET_VIBRATION,רטט בקר,Gamepad vibration
+SET_LANGUAGE_NOTE,הממשק כולו יוצג מחדש בשפה שנבחרה.,The whole interface will be shown again in the chosen language.
+ACT_ACCELERATE,גז,Throttle
+ACT_BRAKE,בלם קדמי,Front brake
+ACT_REAR_BRAKE,בלם אחורי,Rear brake
+ACT_STEER_LEFT,היגוי שמאלה,Steer left
+ACT_STEER_RIGHT,היגוי ימינה,Steer right
+ACT_TUCK,השתופפות,Tuck
+ACT_CAMERA,החלפת מצלמה,Change camera
+ACT_LOOK_BACK,מבט לאחור,Look back
+ACT_RESPAWN,חזרה למסלול,Respawn
+ONLINE_SUB,עד ארבעה שחקנים ברשת מקומית או באינטרנט לפי כתובת IP,Up to four players over LAN or the internet by IP
+CREDITS_SUB,מי עשה את זה,Who made this
+CREDITS_1,רמון 40 נבנה במנוע Godot 4.7 (רישיון MIT).,Ramon 40 is built with the Godot Engine 4.7 (MIT license).
+CREDITS_2,"גופנים: Assistant ו-Karantina מתוך Google Fonts, ברישיון SIL Open Font License 1.1.","Fonts: Assistant and Karantina from Google Fonts, SIL Open Font License 1.1."
+CREDITS_3,בדיקות אוטומטיות: GUT מאת Tom Butch Wesley (רישיון MIT).,Automated tests: GUT by Tom Butch Wesley (MIT license).
+CREDITS_4,"כל המודלים, הטקסטורות, השיידרים, הצלילים והמוזיקה נוצרים בזמן אמת בקוד של המשחק.","All models, textures, shaders, sounds and music are generated procedurally by the game's own code."
+CREDITS_5,"המסלולים בהשראת כביש 40 במכתש רמון, כביש 90 לאורך ים המלח וכביש 1 בעלייה לירושלים.","Tracks inspired by Route 40 in the Ramon Crater, Route 90 along the Dead Sea and Route 1 climbing to Jerusalem."

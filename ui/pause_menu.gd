@@ -77,10 +77,7 @@ func _open_settings() -> void:
 	_settings.closed.connect(func():
 		_settings.queue_free()
 		_settings = null
-		for fx in race._post_fx:
-			fx.update_fx(0.0, false, 1.0)
-		if race.world:
-			EnvironmentBuilder.apply_quality(race.world.environment_node.environment, race.world.sun)
+		race.apply_quality_settings()
 		_buttons[0].grab_focus())
 
 
