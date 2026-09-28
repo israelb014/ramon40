@@ -12,6 +12,6 @@ Resume rule: read this file and DECISIONS.md, then continue from the first unche
 - [x] 8. Audio: engines, effects and menu music.
 - [x] 9. Menus, settings, Hebrew/English localization, save system.
 - [x] 10. Championship, Time Trial with ghosts, replays.
-- [ ] 11. Split-screen and LAN/online multiplayer.
+- [x] 11. Split-screen and LAN/online multiplayer.
 - [ ] 12. Polish pass: fix every known bug, balance AI and bikes, performance on the Low preset.
 - [ ] 13. README in Hebrew, CREDITS.md, tag v1.0.0 and confirm the Release is published with Windows and Linux builds.

@@ -17,3 +17,5 @@
 - Bikes close to a single-player chase camera fade out (GeometryInstance3D.transparency) instead of clipping through the lens.
 - Audio is baked at startup on worker threads (about 5 s total, menu music first) into looping 16-bit AudioStreamWAVs; engines use three RPM layers x on/off load per bike, crossfaded and pitch-shifted at runtime. Headless runs skip baking unless RAMON_AUDIO is set (unit tests cover the synthesizers).
 - Engine loops are built from an exactly periodic signal with pre-rolled filters so they loop without clicks.
+- Multiplayer: ENet host/join by IP (port 24040), up to 4 humans + AI to 8 riders. Each peer simulates its own bike (client-authoritative, fine for LAN/friendly online), the host simulates AI and relays all bikes at 20 Hz; remote bikes are interpolated 100 ms behind; the host decides final results; a disconnected rider's bike is taken over by the AI. CI runs a two-process loopback race.
+- Godot mirrors icons on text buttons in RTL layouts, so directional icons on text buttons are always authored LTR ("arrow_right" = forward).

@@ -13,9 +13,13 @@ func _ready() -> void:
 	for i in 30:
 		await get_tree().process_frame
 	_shot(out + "_home.png")
-	var pages := {"quick": PageRaceSetup.create("quick"), "garage": PageGarage.new(), "champ": PageChampionship.new(), "settings": PageSettings.new()}
+	var pages := {"online": PageOnline.new(), "quick": PageRaceSetup.create("quick"), "garage": PageGarage.new(), "champ": PageChampionship.new(), "settings": PageSettings.new()}
+	if OS.get_environment("SHOT_ONLINE_ONLY") != "":
+		pages = {"online": PageOnline.new()}
 	for k in pages:
 		menu.open_page(pages[k], false)
+		if k == "online":
+			pages[k]._on_host()
 		for i in 25:
 			await get_tree().process_frame
 		_shot(out + "_" + k + ".png")

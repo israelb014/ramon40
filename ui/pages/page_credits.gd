@@ -14,7 +14,7 @@ func _ready() -> void:
 		var l := UITheme.body(tr(key), 28, UITheme.TEXT)
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		cv.add_child(l)
-	var ok := Widgets.button(tr("BACK"), "arrow_right" if Settings.is_rtl() else "arrow_left", true)
+	var ok := Widgets.button(tr("BACK"), "arrow_left", true)
 	ok.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	ok.custom_minimum_size = Vector2(260, 76)
 	ok.pressed.connect(func(): menu.back())

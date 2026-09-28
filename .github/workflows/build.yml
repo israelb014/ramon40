@@ -57,6 +57,9 @@ jobs:
       - name: Headless smoke run
         run: tools/ci_smoke.sh
 
+      - name: LAN multiplayer loopback test
+        run: tools/ci_net.sh
+
       - name: Export Windows and Linux
         run: tools/ci_export.sh
 

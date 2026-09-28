@@ -26,6 +26,7 @@ Save="*res://scripts/core/save_system.gd"
 Controls="*res://scripts/core/controls.gd"
 Game="*res://scripts/core/game.gd"
 Audio="*res://audio/audio_manager.gd"
+Net="*res://scripts/net/net_session.gd"
 
 [display]
 

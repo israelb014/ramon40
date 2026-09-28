@@ -46,7 +46,10 @@ var _camera_modes: Array = []
 func _ready() -> void:
 	config = Game.race_config if not Game.race_config.is_empty() else Game.default_config()
 	_build_world()
-	_spawn_bikes()
+	if config.get("mode", "") == "online":
+		_spawn_online()
+	else:
+		_spawn_bikes()
 	_setup_views()
 	_setup_ui()
 	recorder = ReplayRecorder.new(bikes.size())
@@ -54,6 +57,9 @@ func _ready() -> void:
 		_setup_ghost()
 	state = State.INTRO
 	state_time = 0.0
+	if config.get("mode", "") == "online" and Net.is_online():
+		net = Net
+		Net.attach_race(self)
 	add_to_group("quality_listeners")
 	Audio.race_started(self)
 
@@ -316,7 +322,7 @@ func _physics_process(delta: float) -> void:
 	state_time += delta
 	match state:
 		State.INTRO:
-			if state_time > 0.6:
+			if state_time > 0.6 and net == null:
 				_set_state(State.COUNTDOWN)
 		State.COUNTDOWN:
 			countdown -= delta
@@ -356,7 +362,7 @@ func _simulate(delta: float) -> void:
 	progress.tick(delta)
 	for i in bikes.size():
 		var c = controllers[i]
-		if c:
+		if c and not (c is RemoteController):
 			c.update(bikes[i], delta)
 	var h := delta / SUBSTEPS
 	for s in SUBSTEPS:
@@ -366,8 +372,13 @@ func _simulate(delta: float) -> void:
 		var events := BikeCollisions.resolve(bikes)
 		for e in events:
 			_on_collision(e)
+	for i in bikes.size():
+		var c = controllers[i]
+		if c is RemoteController:
+			c.update(bikes[i], delta)
 	for b in bikes:
-		b.post_step(delta)
+		if not b.is_remote:
+			b.post_step(delta)
 		var ph := b.physics
 		var heading := ph.forward().dot(track.tangents[maxi(ph.track_index, 0)])
 		var ev := progress.update_rider(b.index, ph.track_dist, heading, absf(ph.speed), delta)
@@ -452,6 +463,11 @@ func _player_finished(b: Bike) -> void:
 func _end_race() -> void:
 	progress.force_finish_all()
 	results = _build_results()
+	if net:
+		if Net.is_host:
+			Net.send_results(_net_results_payload())
+		elif not Net.host_results.is_empty():
+			results = _results_from_payload(Net.host_results)
 	_set_state(State.RESULTS)
 	Game.last_result = {"config": config, "results": results, "track": track.id}
 	_apply_race_rewards()
@@ -648,12 +664,151 @@ func restart() -> void:
 
 func quit_to_menu() -> void:
 	get_tree().paused = false
+	if net:
+		Net.end_race()
+		Net.leave()
 	Game.go_to_menu("")
 
 
 func _update_net(delta: float) -> void:
 	if net and net.has_method("race_tick"):
 		net.race_tick(self, delta)
+
+
+# --- Online ------------------------------------------------------------------
+
+func _spawn_online() -> void:
+	var riders: Array = config.get("riders", [])
+	progress = RaceProgress.new(track.length, int(config.get("laps", 2)))
+	var me := Net.my_id()
+	var difficulty: String = config.get("difficulty", "medium")
+	for i in riders.size():
+		var r: Dictionary = riders[i]
+		var colors := {
+			"paint": GameData.paint_color(int(r.get("paint", (i * 3) % 12))),
+			"accent": GameData.paint_color(int(r.get("accent", (i * 5 + 2) % 12))),
+			"suit_main": GameData.paint_color(int(r.get("suit_main", [2, 1, 5, 8][i % 4]))),
+			"suit_accent": GameData.paint_color(int(r.get("suit_accent", i % 12))),
+			"helmet": Color.from_hsv(float(i) / riders.size(), 0.45, 0.95),
+		}
+		var b := _make_bike(i, String(r["bike"]), colors, int(r.get("grid", i)))
+		b.rider_name = String(r.get("name", ""))
+		b.set_meta("peer", int(r.get("peer", 0)))
+		if r["kind"] == "human" and int(r["peer"]) == me:
+			b.is_player = true
+			b.player_index = 0
+			if config.get("autopilot", false):
+				var bot := AIController.new(line, GameData.bike(b.bike_id), "medium", 90 + i)
+				bot.enabled = false
+				bot.rubber_band_enabled = false
+				controllers.append(bot)
+			else:
+				var pc := PlayerController.new(["p1", "p2"])
+				pc.enabled = false
+				controllers.append(pc)
+			local_players.append(i)
+		elif r["kind"] == "ai" and Net.is_host:
+			var ai := AIController.new(line, GameData.bike(b.bike_id), difficulty, int(r.get("seed", i)))
+			ai.enabled = false
+			ai.progress = progress
+			ai.rubber_band_enabled = false
+			controllers.append(ai)
+		else:
+			b.is_remote = true
+			controllers.append(RemoteController.new())
+	for c in controllers:
+		if c is AIController:
+			c.all_bikes = bikes
+	for b in bikes:
+		progress.add_rider(b.index, b.physics.track_dist)
+		if b.is_player:
+			b.physics.assist = 0.55
+	var night: bool = GameData.TRACKS.get(track.id, {}).get("time_of_day", "") == "night"
+	for b in bikes:
+		b.enable_headlight(night)
+
+
+func net_start_countdown() -> void:
+	if state == State.INTRO:
+		_set_state(State.COUNTDOWN)
+
+
+func net_pack_all() -> PackedByteArray:
+	var f := PackedFloat32Array()
+	for b in bikes:
+		f.append_array(ReplayRecorder.encode(b.snapshot()))
+	return f.to_byte_array()
+
+
+func net_pack_local() -> PackedByteArray:
+	if local_players.is_empty():
+		return PackedByteArray()
+	return ReplayRecorder.encode(bikes[local_players[0]].snapshot()).to_byte_array()
+
+
+func net_apply_peer_state(peer_id: int, data: PackedByteArray) -> void:
+	var f := data.to_float32_array()
+	if f.size() != ReplayRecorder.STRIDE:
+		return
+	for i in bikes.size():
+		if int(bikes[i].get_meta("peer", 0)) == peer_id and controllers[i] is RemoteController:
+			controllers[i].push(Time.get_ticks_msec() / 1000.0, f)
+
+
+func net_apply_world_state(data: PackedByteArray, t: float) -> void:
+	var f := data.to_float32_array()
+	var stride := ReplayRecorder.STRIDE
+	for i in mini(bikes.size(), f.size() / stride):
+		if controllers[i] is RemoteController:
+			controllers[i].push(t, f.slice(i * stride, (i + 1) * stride))
+
+
+func net_peer_left(peer_id: int) -> void:
+	## Host: a human left, their bike is taken over by the AI.
+	for i in bikes.size():
+		if int(bikes[i].get_meta("peer", 0)) == peer_id and controllers[i] is RemoteController:
+			var b := bikes[i]
+			b.is_remote = false
+			b.external_state = {}
+			var ai := AIController.new(line, GameData.bike(b.bike_id), String(config.get("difficulty", "medium")), 500 + i)
+			ai.all_bikes = bikes
+			ai.progress = progress
+			ai.rubber_band_enabled = false
+			ai.enabled = state == State.RACING or state == State.FINISHING
+			controllers[i] = ai
+			b.physics.track_index = -1
+			for h in huds:
+				h.flash(tr("NET_PLAYER_LEFT") % b.rider_name, UITheme.MUTED)
+
+
+func _net_results_payload() -> Array:
+	var out := []
+	for r in results:
+		out.append({"index": r["index"], "position": r["position"], "time": r["time"], "best_lap": r["best_lap"], "estimated": r["estimated"]})
+	return out
+
+
+func _results_from_payload(payload: Array) -> Array:
+	var out := []
+	for p in payload:
+		var id := int(p["index"])
+		if id < 0 or id >= bikes.size():
+			continue
+		var b := bikes[id]
+		out.append({"position": int(p["position"]), "index": id, "name": b.rider_name, "bike": b.bike_id,
+			"time": float(p["time"]), "best_lap": float(p["best_lap"]), "is_player": b.is_player,
+			"player_index": b.player_index, "estimated": bool(p["estimated"]), "remote": b.is_remote, "paint": b.paint})
+	return out
+
+
+func net_results_received(payload: Array) -> void:
+	if Net.is_host or state != State.RESULTS:
+		return
+	results = _results_from_payload(payload)
+	if _results_screen:
+		_results_screen.queue_free()
+		_results_screen = null
+		_show_results()
 
 
 # --- Replay ------------------------------------------------------------------

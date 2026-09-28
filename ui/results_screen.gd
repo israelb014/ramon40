@@ -82,7 +82,7 @@ func _ready() -> void:
 	if mode == "championship":
 		_add_button(sv, tr("RESULTS_STANDINGS"), "trophy", true, func(): Game.championship_after_race())
 	else:
-		_add_button(sv, tr("RESULTS_CONTINUE"), "arrow_right" if not Settings.is_rtl() else "arrow_left", true, func(): Game.go_to_menu(Game.menu_page_for_mode(mode)))
+		_add_button(sv, tr("RESULTS_CONTINUE"), "arrow_right", true, func(): Game.go_to_menu(Game.menu_page_for_mode(mode)))
 	_add_button(sv, tr("RESULTS_REPLAY"), "replay", false, func(): race.start_replay())
 	if mode != "championship" and mode != "online":
 		_add_button(sv, tr("PAUSE_RESTART"), "restart", false, func(): race.restart())
