@@ -139,4 +139,5 @@ func _exit_tree() -> void:
 
 func quit_game() -> void:
 	await fade_out(0.25)
+	Audio.release()
 	get_tree().quit()

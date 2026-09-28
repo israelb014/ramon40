@@ -54,7 +54,7 @@ func _build() -> void:
 	track = world.track
 	var sel: String = Save.progress.get("selected_bike", "naked")
 	hero = _spawn(sel, _hero_colors(sel))
-	var xf := track.transform_at(HERO_DIST, track.half_width + track.shoulder + 1.4)
+	var xf := track.transform_at(HERO_DIST, track.half_width + 1.6)
 	xf.basis = xf.basis * Basis(Vector3.UP, deg_to_rad(-24.0))
 	hero.place_at(xf)
 	hero.physics.in_throttle = 0.0

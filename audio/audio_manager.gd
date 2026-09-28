@@ -130,10 +130,25 @@ func is_baking() -> bool:
 
 
 func _exit_tree() -> void:
+	release()
 	if _task >= 0:
 		WorkerThreadPool.wait_for_task_completion(_task)
 	if _music_task >= 0:
 		WorkerThreadPool.wait_for_task_completion(_music_task)
+
+
+## Stops all playback and drops the baked streams (called on exit).
+func release() -> void:
+	if _music_tween:
+		_music_tween.kill()
+	_music_player.stop()
+	_music_player.stream = null
+	for p in _ui_players:
+		p.stop()
+		p.stream = null
+	music = null
+	sounds.clear()
+	engines.clear()
 
 
 # --- Interface & music --------------------------------------------------------
