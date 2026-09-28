@@ -4,8 +4,8 @@ shader_type spatial;
 
 #include "res://shaders/include/noise.gdshaderinc"
 
-uniform vec3 asphalt_color : source_color = vec3(0.25, 0.25, 0.27);
-uniform vec3 asphalt_light : source_color = vec3(0.40, 0.39, 0.38);
+uniform vec3 asphalt_color : source_color = vec3(0.29, 0.29, 0.31);
+uniform vec3 asphalt_light : source_color = vec3(0.44, 0.43, 0.42);
 uniform vec3 edge_color : source_color = vec3(0.98, 0.78, 0.10);
 uniform vec3 center_color : source_color = vec3(0.95, 0.95, 0.92);
 uniform float half_width = 5.5;

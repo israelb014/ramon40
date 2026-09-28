@@ -65,11 +65,13 @@ static func build_core_chunks(t: TrackData) -> Array:
 
 static func _salt_mask(t: TrackData, x: float, z: float, h: float) -> float:
 	# Salt crusts on the low flats near the sea, stronger to the south (evaporation ponds).
-	if h > 1.5:
+	if h > 1.0:
 		return 0.0
-	var n := sin(x * 0.013) * 0.5 + sin(z * 0.011 + x * 0.004) * 0.5
-	var low := clampf((1.5 - h) / 3.0, 0.0, 1.0)
-	return clampf(low * (0.55 + n * 0.45) * 1.4, 0.0, 1.0)
+	# Patchy crusts: cellular-ish pattern from interfering waves, strongest by the water.
+	var n := sin(x * 0.021 + sin(z * 0.013) * 2.0) * sin(z * 0.017 + sin(x * 0.009) * 2.0)
+	var shore_k := clampf((x - 40.0) / 120.0, 0.0, 1.0)
+	var low := clampf((1.0 - h) / 4.0, 0.0, 1.0)
+	return clampf((n * 1.8 - 0.2) * low * (0.3 + shore_k), 0.0, 0.95)
 
 
 ## Coarse terrain covering a large square around the track. Inside the core heightmap

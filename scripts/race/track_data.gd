@@ -36,6 +36,10 @@ var heights := PackedFloat32Array()
 var road_dist := PackedFloat32Array() ## per cell: distance to the centerline (capped)
 
 var _lookup: Dictionary = {}
+## How strongly the terrain is shifted toward the road elevation at large scale.
+var correction_strength := 1.0
+## Distance from the centerline where the terrain blend back to natural ends.
+var blend_radius := 48.0
 
 
 static func build(p_layout: Dictionary, with_terrain := true) -> TrackData:
@@ -51,6 +55,8 @@ func _build(p_layout: Dictionary, with_terrain: bool) -> void:
 	shoulder = layout.get("shoulder", 2.5)
 	wall = layout.get("wall", 26.0)
 	style = TerrainStyle.new(layout.get("style", "flat"), layout.get("seed", 1))
+	correction_strength = layout.get("terrain_correction", 1.0)
+	blend_radius = layout.get("blend_radius", 48.0)
 	_sample_spline(layout["points"])
 	_smooth_heights()
 	_compute_frames()
@@ -372,8 +378,8 @@ func _build_heightmap() -> void:
 			heights[row + xi] = style.height(hm_origin.x + xi * GRID_CELL, z)
 	_apply_correction_field()
 	# Stamp the road corridor: nearest centerline distance and road height per cell.
-	var radius := 48.0
-	var rc := int(ceil(radius / GRID_CELL))
+	var radius := blend_radius
+	var rc := int(ceil(maxf(radius, 48.0) / GRID_CELL))
 	for i in count:
 		var p := points[i]
 		var cx := int(round((p.x - hm_origin.x) / GRID_CELL))
@@ -450,7 +456,7 @@ func _apply_correction_field() -> void:
 				v = acc / wsum
 			var dm := sqrt(dmin)
 			var fade := 1.0 - clampf((dm - 140.0) / (MARGIN - 60.0 - 140.0), 0.0, 1.0)
-			field[cz * cw + cx] = v * fade * fade * (3.0 - 2.0 * fade)
+			field[cz * cw + cx] = v * fade * fade * (3.0 - 2.0 * fade) * correction_strength
 	var ratio := GRID_CELL / coarse
 	for zi in hm_h:
 		var fz := zi * ratio

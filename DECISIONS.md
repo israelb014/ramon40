@@ -12,3 +12,6 @@
 - Arabic line on direction signs is omitted: the bundled OFL fonts (Assistant, Karantina) have no Arabic glyphs; signs show Hebrew + English.
 - Default race length: 2 laps on Ramon and Jerusalem, 3 on the Dead Sea (about 4-5 minutes each).
 - Development rendering checks run on lavapipe (software Vulkan) under Xvfb inside the build container.
+- Ramon terrain keeps 70% of the road-following correction with a 34 m blend so the escarpment stays visible; the crater rim sits right beside the rim road and the switchbacks descend a spur.
+- Post-processing (motion blur, heat haze, chromatic aberration, sun lens flare, vignette) is a single canvas shader over the 3D view on its own layer under the HUD, so it works per split-screen viewport and never blurs the HUD.
+- Bikes close to a single-player chase camera fade out (GeometryInstance3D.transparency) instead of clipping through the lens.

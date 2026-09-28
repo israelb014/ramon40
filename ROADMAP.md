@@ -8,7 +8,7 @@ Resume rule: read this file and DECISIONS.md, then continue from the first unche
 - [x] 4. AI opponents and full race flow (countdown, laps, results).
 - [x] 5. Dead Sea and Jerusalem tracks.
 - [x] 6. Four bikes, garage and paint customization.
-- [ ] 7. Graphics pass: lighting, post-processing, particles and quality presets.
+- [x] 7. Graphics pass: lighting, post-processing, particles and quality presets.
 - [ ] 8. Audio: engines, effects and menu music.
 - [ ] 9. Menus, settings, Hebrew/English localization, save system.
 - [ ] 10. Championship, Time Trial with ghosts, replays.

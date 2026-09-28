@@ -13,7 +13,7 @@ func _ready() -> void:
 	add_child(w)
 	w.assemble(data)
 	var t2 := Time.get_ticks_msec()
-	print("gen ms ", t1 - t0, " assemble ms ", t2 - t1)
+	print("gen ms ", t1 - t0, " assemble ms ", t2 - t1, " nodes ", w.find_children("*", "GeometryInstance3D", true, false).size())
 	var cam := Camera3D.new()
 	cam.far = 12000.0
 	cam.fov = 70.0
@@ -33,6 +33,7 @@ func _ready() -> void:
 		for i in 10:
 			await get_tree().process_frame
 		get_viewport().get_texture().get_image().save_png("%s_%s_%03d.png" % [out, id, int(f * 100)])
+		print("frac %.2f draws=%d prims=%d objects=%d" % [f, RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_OBJECTS_IN_FRAME)])
 	var b := tr.bounds()
 	cam.global_position = Vector3(b.get_center().x, 900, b.end.y + 900)
 	cam.look_at(Vector3(b.get_center().x, 0, b.get_center().y), Vector3.UP)

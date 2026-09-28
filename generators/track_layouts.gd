@@ -53,6 +53,9 @@ static func _ramon() -> Dictionary:
 			{"at": 0.86, "side": 1, "lines": ["שדה בוקר", "Sde Boker"], "sub": "40"},
 		],
 		"banner": "כביש 40 · מכתש רמון",
+		# Keep more of the natural escarpment: the road cuts into the rim.
+		"terrain_correction": 0.7,
+		"blend_radius": 34.0,
 	}
 
 

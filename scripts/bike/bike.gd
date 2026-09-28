@@ -77,6 +77,27 @@ func _build_visuals() -> void:
 	rider.attach(model)
 
 
+var _fade := 1.0
+var _geoms: Array = []
+
+
+## Fades the whole bike (used when a camera gets too close to it).
+func set_fade(alpha: float) -> void:
+	alpha = clampf(alpha, 0.0, 1.0)
+	if absf(alpha - _fade) < 0.02:
+		return
+	_fade = alpha
+	if _geoms.is_empty():
+		for n in find_children("*", "GeometryInstance3D", true, false):
+			_geoms.append(n)
+		if rider:
+			for n in rider.find_children("*", "GeometryInstance3D", true, false):
+				_geoms.append(n)
+	for g in _geoms:
+		if is_instance_valid(g):
+			g.transparency = 1.0 - alpha
+
+
 func set_paint(p_paint: Color, p_accent: Color) -> void:
 	paint = p_paint
 	accent = p_accent

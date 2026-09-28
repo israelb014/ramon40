@@ -576,11 +576,18 @@ func _process(delta: float) -> void:
 					b.respawn()
 		cam.update_camera(delta)
 	_update_huds()
+	if cameras.size() == 1:
+		var cp := cameras[0].global_position
+		for b in bikes:
+			if b != cameras[0].target:
+				b.set_fade(clampf((cp.distance_to(b.global_position + Vector3.UP * 0.8) - 1.2) / 1.8, 0.0, 1.0))
 	for i in _post_fx.size():
 		var fx: PostFX = _post_fx[i]
 		var target: Bike = cameras[mini(i, cameras.size() - 1)].target if not cameras.is_empty() else null
 		if target:
-			fx.update_fx(absf(target.physics.speed), cameras[mini(i, cameras.size() - 1)].mode == RaceCamera.Mode.HELMET, delta)
+			var cam := cameras[mini(i, cameras.size() - 1)]
+			fx.update_fx(absf(target.physics.speed), cam.mode == RaceCamera.Mode.HELMET, delta)
+			fx.update_flare(cam, world.sun)
 	Audio.update_race(self, delta)
 
 

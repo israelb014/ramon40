@@ -47,7 +47,7 @@ func height(x: float, z: float) -> float:
 func _ramon(x: float, z: float) -> float:
 	var a := 6000.0
 	var b := 2800.0
-	var cz := 2500.0
+	var cz := 2250.0
 	var e := sqrt((x / a) * (x / a) + ((z - cz) / b) * ((z - cz) / b))
 	var s := (e - 1.0) * b # signed distance from rim, positive outside (plateau)
 	s += _n_warp.get_noise_2d(x, z) * 140.0 + _n_mid.get_noise_2d(x, z) * 25.0
@@ -59,7 +59,7 @@ func _ramon(x: float, z: float) -> float:
 	var frac := smooth * steps - floorf(smooth * steps)
 	var stepped := st + (1.0 / steps) * pow(frac, 3.5)
 	var cliff := lerpf(smooth, stepped, 0.55)
-	var plateau := 90.0 + _n_large.get_noise_2d(x, z) * 10.0 + _n_small.get_noise_2d(x, z) * 1.2
+	var plateau := 88.0 + _n_large.get_noise_2d(x, z) * 7.0 + _n_small.get_noise_2d(x, z) * 1.2
 	var floor_h := _n_large.get_noise_2d(x + 900.0, z) * 8.0 + maxf(_n_ridge.get_noise_2d(x, z), 0.0) * 34.0
 	floor_h += _n_small.get_noise_2d(x, z) * 0.8
 	return lerpf(floor_h, plateau, cliff)

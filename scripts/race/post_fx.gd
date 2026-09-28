@@ -20,6 +20,26 @@ func setup(style: String) -> void:
 	update_fx(0.0, false, 0.0)
 
 
+## Updates the sun flare from the active camera and the scene's sun light.
+func update_flare(cam: Camera3D, sun: DirectionalLight3D) -> void:
+	if _mat == null or cam == null or sun == null or not is_instance_valid(cam):
+		return
+	var sun_dir := sun.global_transform.basis.z.normalized()
+	var facing := -cam.global_transform.basis.z.dot(sun_dir)
+	var amount := 0.0
+	if facing > 0.0 and sun_dir.y > -0.02 and sun.light_energy > 0.8:
+		var world_p := cam.global_position + sun_dir * 1000.0
+		if not cam.is_position_behind(world_p):
+			var sp := cam.unproject_position(world_p)
+			var vs := cam.get_viewport().get_visible_rect().size
+			var uv := sp / vs
+			var inside := 1.0 - clampf((maxf(absf(uv.x - 0.5), absf(uv.y - 0.5)) - 0.45) / 0.2, 0.0, 1.0)
+			amount = pow(facing, 3.0) * inside * (1.0 if sun_dir.y < 0.35 else 0.5)
+			_mat.set_shader_parameter("sun_pos", uv)
+			_mat.set_shader_parameter("flare_color", sun.light_color)
+	_mat.set_shader_parameter("flare_amount", amount)
+
+
 func update_fx(speed: float, helmet: bool, delta: float) -> void:
 	if _mat == null:
 		return

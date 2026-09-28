@@ -11,6 +11,8 @@ var _shot_times: Array = []
 
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
+	if OS.get_environment("RB_PRESET") != "":
+		Settings.apply_preset(OS.get_environment("RB_PRESET"))
 	var cfg := Game.default_config()
 	cfg["track"] = args[0] if args.size() > 0 else "ramon"
 	cfg["laps"] = int(args[1]) if args.size() > 1 else 1
