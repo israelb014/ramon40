@@ -170,25 +170,40 @@ static func palm(seed_value: int, height := 9.0) -> ArrayMesh:
 	return _commit(mb)
 
 
-## Aleppo pine for the Jerusalem hills: leaning trunk with irregular foliage clumps.
+## Jerusalem forest tree. Even variants are stacked-cone conifers, odd variants are
+## Aleppo pines with a leaning trunk and rounded foliage clumps.
 static func pine(seed_value: int) -> ArrayMesh:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var mb := MeshBuilder.new(true)
 	var bark := Color(0.27, 0.20, 0.16)
-	var h := rng.randf_range(7.0, 11.0)
-	var top := Vector3(rng.randf_range(-0.8, 0.8), h, rng.randf_range(-0.8, 0.8))
+	var green := Color(0.15, 0.26, 0.13)
+	if seed_value % 2 == 0:
+		var h := rng.randf_range(7.0, 10.0)
+		mb.add_cylinder(Transform3D(), 0.22, 0.12, h * 0.5, 6, bark)
+		mb.surface("foliage")
+		var tiers := 4
+		for k in tiers:
+			var t := float(k) / tiers
+			var base_y := h * (0.22 + t * 0.55)
+			var r := lerpf(2.4, 0.9, t) * rng.randf_range(0.9, 1.1)
+			var tier_h := h * 0.36
+			var prof := [Vector2(r, 0.0), Vector2(r * 0.55, tier_h * 0.45), Vector2(0.05, tier_h)]
+			var tilt := Basis(Vector3(rng.randf_range(-1, 1), 0, rng.randf_range(-1, 1)).normalized(), rng.randf_range(0.0, 0.08))
+			mb.add_lathe(Transform3D(tilt, Vector3(0, base_y, 0)), prof, 8, green * rng.randf_range(0.85, 1.15), true)
+		return _commit(mb)
+	var h2 := rng.randf_range(7.0, 11.0)
+	var top := Vector3(rng.randf_range(-0.8, 0.8), h2, rng.randf_range(-0.8, 0.8))
 	mb.add_tube(Vector3.ZERO, top, 0.28, 0.12, 6, bark)
 	mb.surface("foliage")
-	var green := Color(0.16, 0.27, 0.13)
 	var clumps := rng.randi_range(4, 6)
 	for c in clumps:
-		var t := rng.randf_range(0.45, 1.0)
+		var t2 := rng.randf_range(0.5, 1.0)
 		var a := rng.randf() * TAU
-		var r := rng.randf_range(0.6, 2.2) * (1.2 - t)
-		var center := top * t + Vector3(cos(a) * r, 0.3, sin(a) * r)
-		var s := rng.randf_range(1.4, 2.4) * (1.25 - t * 0.4)
-		mb.add_sphere(Transform3D(Basis().scaled(Vector3(s, s * 0.6, s)), center), 1.0, 3, 6, green * rng.randf_range(0.8, 1.2))
+		var rr := rng.randf_range(0.8, 2.2) * (1.2 - t2)
+		var center := top * t2 + Vector3(cos(a) * rr, 0.4, sin(a) * rr)
+		var sz := rng.randf_range(1.5, 2.4) * (1.25 - t2 * 0.4)
+		mb.add_sphere(Transform3D(Basis().scaled(Vector3(sz, sz * 0.55, sz)), center), 1.0, 4, 9, green * rng.randf_range(0.8, 1.2))
 	return _commit(mb)
 
 
@@ -256,7 +271,7 @@ static func stone_wall(seed_value: int) -> ArrayMesh:
 		l = minf(l, 2.0 - z)
 		for row in 2:
 			var h := rng.randf_range(0.36, 0.46)
-			var c := Color(0.80, 0.74, 0.62) * rng.randf_range(0.82, 1.08)
+			var c := Color(0.64, 0.6, 0.52) * rng.randf_range(0.8, 1.05)
 			c.a = 1.0
 			var off := 0.0 if row == 0 else rng.randf_range(-0.15, 0.15)
 			mb.add_box(Transform3D(Basis(), Vector3(rng.randf_range(-0.03, 0.03), 0.2 + row * 0.42, clampf(z + l * 0.5 + off, -1.8, 1.8))), Vector3(0.55, h, l * 0.96), c)

@@ -68,7 +68,7 @@ func _ramon(x: float, z: float) -> float:
 ## Dead Sea: sea to the east, salt flats and beaches, steep Judean cliffs to the west and
 ## the Moab mountains across the water.
 func _deadsea(x: float, z: float) -> float:
-	var shore := 170.0 + _n_warp.get_noise_2d(x, z) * 90.0
+	var shore := 125.0 + _n_warp.get_noise_2d(x, z) * 55.0
 	var h := 0.0
 	# West: cliffs rising from about x=-480.
 	var wx := -(x + 470.0 + _n_mid.get_noise_2d(x, z) * 60.0)
@@ -81,7 +81,7 @@ func _deadsea(x: float, z: float) -> float:
 	h += _n_small.get_noise_2d(x, z) * 0.6
 	# East: shore slopes down under the sea (water plane at -6).
 	if x > shore:
-		h -= clampf((x - shore) / 90.0, 0.0, 1.0) * 14.0
+		h -= clampf((x - shore) / 45.0, 0.0, 1.0) * 14.0
 	# Moab mountains far across the sea.
 	if x > 5200.0:
 		var m := clampf((x - 5200.0) / 1600.0, 0.0, 1.0)

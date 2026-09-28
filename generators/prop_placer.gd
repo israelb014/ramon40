@@ -46,7 +46,7 @@ func place_all() -> Dictionary:
 			_scatter("bush_green", 8.0, 0.25 * density, 9.0, 120.0, 0.0, 0.7, Vector2(0.6, 1.3), false)
 			_scatter("rock_lime", 20.0, 0.18, 9.5, 250.0, 0.0, 1.0, Vector2(0.6, 1.8), true)
 			_stone_walls()
-			_streetlights(46.0)
+			_streetlights(32.0)
 	return groups
 
 

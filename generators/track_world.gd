@@ -266,9 +266,9 @@ func _build_props(groups: Dictionary, quality_draw: int) -> void:
 			for xf in groups[id]:
 				var l := OmniLight3D.new()
 				l.position = xf * Vector3(2.1, 8.2, 0)
-				l.omni_range = 24.0
-				l.omni_attenuation = 1.2
-				l.light_energy = 2.6
+				l.omni_range = 30.0
+				l.omni_attenuation = 1.1
+				l.light_energy = 3.6
 				l.light_color = Color(1.0, 0.78, 0.48)
 				l.distance_fade_enabled = true
 				l.distance_fade_begin = 140.0 + 60.0 * quality_draw
@@ -306,8 +306,8 @@ func _city_lights() -> void:
 	var mb := MeshBuilder.new(true)
 	mb.surface("lamp")
 	var mesh_box := BoxMesh.new()
-	mesh_box.size = Vector3(1.6, 1.6, 1.6)
-	mesh_box.material = PropMeshes.lamp_material(Color(1.0, 0.72, 0.4), 6.0)
+	mesh_box.size = Vector3(0.9, 0.9, 0.9)
+	mesh_box.material = PropMeshes.lamp_material(Color(1.0, 0.76, 0.46), 2.2)
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
 	mm.mesh = mesh_box

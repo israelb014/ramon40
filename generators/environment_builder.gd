@@ -26,14 +26,14 @@ const TIMES := {
 		"adjust_saturation": 1.05, "adjust_contrast": 1.04,
 	},
 	"night": {
-		"sun_az": 120.0, "sun_el": 38.0, "sun_color": Color(0.55, 0.66, 1.0), "sun_energy": 0.28,
+		"sun_az": 120.0, "sun_el": 38.0, "sun_color": Color(0.58, 0.68, 1.0), "sun_energy": 0.42,
 		"zenith_day": Color(0.02, 0.03, 0.08), "horizon_day": Color(0.07, 0.09, 0.16),
 		"zenith_sunset": Color(0.02, 0.03, 0.08), "horizon_sunset": Color(0.07, 0.09, 0.16),
 		"ground": Color(0.02, 0.02, 0.03), "night": 1.0, "stars": 1.0, "clouds": 0.25,
-		"cloud_color": Color(0.35, 0.38, 0.5), "city_glow": 0.7,
+		"cloud_color": Color(0.35, 0.38, 0.5), "city_glow": 0.32,
 		"fog_color": Color(0.06, 0.07, 0.12), "fog_density": 0.0011, "fog_sky_affect": 0.15,
 		"fog_height": 0.0, "fog_height_density": 0.004, "vol_fog_density": 0.012, "vol_fog_albedo": Color(0.6, 0.65, 0.8),
-		"ambient_energy": 0.35, "exposure": 1.35, "white": 5.0, "glow_bloom": 0.12, "glow_strength": 1.2,
+		"ambient_energy": 0.6, "exposure": 1.55, "white": 5.0, "glow_bloom": 0.12, "glow_strength": 1.2,
 		"adjust_saturation": 1.1, "adjust_contrast": 1.08,
 	},
 }
