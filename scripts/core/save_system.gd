@@ -52,7 +52,8 @@ func load_progress() -> void:
 	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
 		return
-	var parsed = JSON.parse_string(f.get_as_text())
+	var json := JSON.new()
+	var parsed = json.data if json.parse(f.get_as_text()) == OK else null
 	if typeof(parsed) != TYPE_DICTIONARY:
 		push_warning("Save file is corrupt; starting fresh.")
 		return
