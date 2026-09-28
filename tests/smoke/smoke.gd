@@ -70,7 +70,25 @@ func _run() -> void:
 	if Save.load_ghost("ramon").is_empty():
 		push_error("smoke: ghost was not saved")
 	print(_log_prefix, "time trial ok")
-	# 5. Back to the menu.
+	# 5. One championship round.
+	var st := Championship.create("naked", "medium", "SMOKE", 3)
+	Save.progress["championship"] = st
+	var ccfg := Championship.race_config(st)
+	ccfg["laps"] = 1
+	ccfg["autopilot"] = true
+	await _race(ccfg)
+	var st2: Dictionary = Save.progress["championship"]
+	var total := 0
+	for r in st2["riders"]:
+		total += int(r["points"])
+	if int(st2["round"]) != 1 or total != 98:
+		push_error("smoke: championship points not applied (round %d, total %d)" % [int(st2["round"]), total])
+	Game.championship_after_race()
+	await _frames(60)
+	if not (_current() is MainMenu):
+		push_error("smoke: standings page did not open")
+	print(_log_prefix, "championship round ok")
+	# 6. Back to the menu.
 	Game.go_to_menu("")
 	await _frames(40)
 	print("SMOKE OK")

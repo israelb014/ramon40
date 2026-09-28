@@ -23,6 +23,11 @@ func _ready() -> void:
 			_shot_times.append(float(a))
 	cfg["autopilot"] = true
 	cfg["players"] = [{"bike": "sport", "name": "BOT"}]
+	if OS.get_environment("BOT_TT") != "":
+		cfg["mode"] = "time_trial"
+		cfg["opponents"] = 0
+		cfg["ghost"] = true
+		cfg["autopilot_skill"] = "medium"
 	if OS.get_environment("BOT_SPLIT") != "":
 		cfg["mode"] = "split"
 		cfg["players"] = [{"bike": "sport", "name": "P1"}, {"bike": "supermoto", "name": "P2", "paint": 5}]
