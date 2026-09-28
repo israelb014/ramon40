@@ -49,7 +49,7 @@ const TRACK_ORDER := ["ramon", "deadsea", "jerusalem"]
 const TRACKS := {
 	"ramon": {
 		"name": "TRACK_RAMON", "subtitle": "TRACK_RAMON_SUB", "road": "ROUTE_40",
-		"time_of_day": "sunset", "default_laps": 3,
+		"time_of_day": "sunset", "default_laps": 2,
 	},
 	"deadsea": {
 		"name": "TRACK_DEADSEA", "subtitle": "TRACK_DEADSEA_SUB", "road": "ROUTE_90",
@@ -57,7 +57,7 @@ const TRACKS := {
 	},
 	"jerusalem": {
 		"name": "TRACK_JERUSALEM", "subtitle": "TRACK_JERUSALEM_SUB", "road": "ROUTE_1",
-		"time_of_day": "night", "default_laps": 3,
+		"time_of_day": "night", "default_laps": 2,
 	},
 }
 
