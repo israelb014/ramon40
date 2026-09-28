@@ -10,7 +10,7 @@ Resume rule: read this file and DECISIONS.md, then continue from the first unche
 - [x] 6. Four bikes, garage and paint customization.
 - [x] 7. Graphics pass: lighting, post-processing, particles and quality presets.
 - [x] 8. Audio: engines, effects and menu music.
-- [ ] 9. Menus, settings, Hebrew/English localization, save system.
+- [x] 9. Menus, settings, Hebrew/English localization, save system.
 - [ ] 10. Championship, Time Trial with ghosts, replays.
 - [ ] 11. Split-screen and LAN/online multiplayer.
 - [ ] 12. Polish pass: fix every known bug, balance AI and bikes, performance on the Low preset.

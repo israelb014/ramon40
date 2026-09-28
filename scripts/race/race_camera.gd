@@ -12,6 +12,11 @@ var mode := Mode.CHASE
 var look_back := false
 var shake := 0.0
 var own_layer := 0 ## render layer holding the followed rider's head (hidden in helmet view)
+## Split-screen halves are very wide: keep the horizontal field of view instead.
+var split := false:
+	set(v):
+		split = v
+		keep_aspect = Camera3D.KEEP_WIDTH if v else Camera3D.KEEP_HEIGHT
 
 var _pos := Vector3.ZERO
 var _offset := Vector3.ZERO
@@ -64,6 +69,8 @@ func update_camera(delta: float) -> void:
 	var fwd := Vector3(-sin(yaw_target), 0.0, -cos(yaw_target))
 	var bike_pos := target.global_position
 	var fov_target := 68.0 + clampf(speed / 75.0, 0.0, 1.0) * 16.0
+	if split:
+		fov_target += 26.0
 
 	if not _initialized:
 		_yaw = yaw_target

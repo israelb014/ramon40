@@ -234,6 +234,7 @@ func _setup_views() -> void:
 		EnvironmentBuilder.apply_viewport_quality(vp)
 		var cam := RaceCamera.new()
 		cam.own_layer = 11 + i
+		cam.split = true
 		vp.add_child(cam)
 		cam.target = bikes[local_players[i]]
 		cam.set_mode(int(Settings.get_value("camera", 0)))

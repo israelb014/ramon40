@@ -23,6 +23,10 @@ func _ready() -> void:
 			_shot_times.append(float(a))
 	cfg["autopilot"] = true
 	cfg["players"] = [{"bike": "sport", "name": "BOT"}]
+	if OS.get_environment("BOT_SPLIT") != "":
+		cfg["mode"] = "split"
+		cfg["players"] = [{"bike": "sport", "name": "P1"}, {"bike": "supermoto", "name": "P2", "paint": 5}]
+		cfg["opponents"] = 4
 	Game.race_config = cfg
 	race = load(Game.RACE).instantiate()
 	add_child(race)
@@ -53,8 +57,14 @@ func _physics_process(d: float) -> void:
 		_log_t = 0.0
 	if _shots != "" and not _shot_times.is_empty() and race.sim_time > _shot_times[0]:
 		_shot_times.pop_front()
+		if OS.get_environment("BOT_PAUSE") != "":
+			race.set_paused(true)
+			for i in 6:
+				await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("%s_%03d.png" % [_shots, int(race.sim_time)])
+		if OS.get_environment("BOT_PAUSE") != "":
+			race.set_paused(false)
 	if race.sim_time > 60.0 * 12:
 		print("TIMEOUT")
 		get_tree().quit(1)
