@@ -11,8 +11,7 @@ static var _hebrew_font: Font
 
 static func sign_font() -> Font:
 	if _hebrew_font == null:
-		var f := FontFile.new()
-		f.load_dynamic_font("res://assets/fonts/Assistant.ttf")
+		var f := load("res://assets/fonts/Assistant.ttf") as FontFile
 		var fv := FontVariation.new()
 		fv.base_font = f
 		fv.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"): 700}

@@ -26,6 +26,8 @@ var _busy := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Route window close through quit_game so audio is released cleanly.
+	get_tree().set_auto_accept_quit(false)
 	_fade_layer = CanvasLayer.new()
 	_fade_layer.layer = 100
 	add_child(_fade_layer)
@@ -122,6 +124,12 @@ func menu_page_for_mode(mode: String) -> String:
 ## Called from the results screen in championship mode.
 func championship_after_race() -> void:
 	go_to_menu("championship_standings")
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Audio.release()
+		get_tree().quit()
 
 
 ## Releases static caches so the engine exits without leaked instances.

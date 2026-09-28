@@ -19,3 +19,7 @@
 - Engine loops are built from an exactly periodic signal with pre-rolled filters so they loop without clicks.
 - Multiplayer: ENet host/join by IP (port 24040), up to 4 humans + AI to 8 riders. Each peer simulates its own bike (client-authoritative, fine for LAN/friendly online), the host simulates AI and relays all bikes at 20 Hz; remote bikes are interpolated 100 ms behind; the host decides final results; a disconnected rider's bike is taken over by the AI. CI runs a two-process loopback race.
 - Godot mirrors icons on text buttons in RTL layouts, so directional icons on text buttons are always authored LTR ("arrow_right" = forward).
+- Fonts are loaded as imported FontFile resources (raw .ttf files are not packed into exports).
+- Window close goes through Game so audio playback is released before exit (no leaked instances).
+- Balance: supermoto 54 kW and cafe racer 68 kW keep every bike within about 6% lap time of the sport bike; AI pace 0.82 / 0.90 / 0.965 of the optimal profile for easy / medium / hard with mild rubber-banding (strongest on easy).
+- Windows executable keeps the default Godot icon: changing it needs rcedit on the build machine, which the Linux CI export avoids (application/modify_resources=false).

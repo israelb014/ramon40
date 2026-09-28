@@ -24,19 +24,15 @@ static var _theme: Theme
 
 static func heading_font() -> Font:
 	if not _fonts.has("heading"):
-		var f := FontFile.new()
-		f.load_dynamic_font("res://assets/fonts/Karantina-Bold.ttf")
-		var fb := FontFile.new()
-		fb.load_dynamic_font("res://assets/fonts/Assistant.ttf")
-		f.fallbacks = [fb]
+		var f: FontFile = (load("res://assets/fonts/Karantina-Bold.ttf") as FontFile).duplicate()
+		f.fallbacks = [_assistant()]
 		_fonts["heading"] = f
 	return _fonts["heading"]
 
 
 static func heading_light_font() -> Font:
 	if not _fonts.has("heading_light"):
-		var f := FontFile.new()
-		f.load_dynamic_font("res://assets/fonts/Karantina-Regular.ttf")
+		var f: FontFile = (load("res://assets/fonts/Karantina-Regular.ttf") as FontFile).duplicate()
 		f.fallbacks = [body_font()]
 		_fonts["heading_light"] = f
 	return _fonts["heading_light"]
@@ -44,9 +40,7 @@ static func heading_light_font() -> Font:
 
 static func _assistant() -> FontFile:
 	if not _fonts.has("assistant_file"):
-		var f := FontFile.new()
-		f.load_dynamic_font("res://assets/fonts/Assistant.ttf")
-		_fonts["assistant_file"] = f
+		_fonts["assistant_file"] = load("res://assets/fonts/Assistant.ttf") as FontFile
 	return _fonts["assistant_file"]
 
 
