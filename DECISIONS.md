@@ -15,3 +15,5 @@
 - Ramon terrain keeps 70% of the road-following correction with a 34 m blend so the escarpment stays visible; the crater rim sits right beside the rim road and the switchbacks descend a spur.
 - Post-processing (motion blur, heat haze, chromatic aberration, sun lens flare, vignette) is a single canvas shader over the 3D view on its own layer under the HUD, so it works per split-screen viewport and never blurs the HUD.
 - Bikes close to a single-player chase camera fade out (GeometryInstance3D.transparency) instead of clipping through the lens.
+- Audio is baked at startup on worker threads (about 5 s total, menu music first) into looping 16-bit AudioStreamWAVs; engines use three RPM layers x on/off load per bike, crossfaded and pitch-shifted at runtime. Headless runs skip baking unless RAMON_AUDIO is set (unit tests cover the synthesizers).
+- Engine loops are built from an exactly periodic signal with pre-rolled filters so they loop without clicks.

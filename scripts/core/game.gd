@@ -124,6 +124,19 @@ func championship_after_race() -> void:
 	go_to_menu("championship_standings")
 
 
+## Releases static caches so the engine exits without leaked instances.
+func _exit_tree() -> void:
+	PropMeshes._cache.clear()
+	BikeModel._mat_cache.clear()
+	UITheme._fonts.clear()
+	UITheme._theme = null
+	Widgets._icons.clear()
+	RacingLine._cache.clear()
+	BikeEffects._soft_tex = null
+	Landmarks._hebrew_font = null
+	_preloaded.clear()
+
+
 func quit_game() -> void:
 	await fade_out(0.25)
 	get_tree().quit()
