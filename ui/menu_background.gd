@@ -15,7 +15,7 @@ var _t := 0.0
 var _task := -1
 var _data: Dictionary = {}
 var _built := false
-const HERO_DIST := 905.0
+const HERO_DIST := 330.0
 
 
 func _ready() -> void:
@@ -54,8 +54,8 @@ func _build() -> void:
 	track = world.track
 	var sel: String = Save.progress.get("selected_bike", "naked")
 	hero = _spawn(sel, _hero_colors(sel))
-	var xf := track.transform_at(HERO_DIST, -(track.half_width + track.shoulder + 1.2))
-	xf.basis = xf.basis * Basis(Vector3.UP, deg_to_rad(28.0))
+	var xf := track.transform_at(HERO_DIST, track.half_width + track.shoulder + 1.4)
+	xf.basis = xf.basis * Basis(Vector3.UP, deg_to_rad(-24.0))
 	hero.place_at(xf)
 	hero.physics.in_throttle = 0.0
 	# A few riders lapping in the background.
@@ -124,7 +124,8 @@ func _update_camera() -> void:
 	if hero == null:
 		return
 	var center := hero.global_position + Vector3.UP * 0.75
-	var a := sin(_t * 0.07) * 0.9 + 2.3
+	# Camera on the road side looking across the bike toward the crater (south).
+	var a := -1.57 + sin(_t * 0.07) * 0.75
 	var r := 5.6 + sin(_t * 0.05) * 0.8
 	var pos := center + Vector3(cos(a) * r, 0.9 + sin(_t * 0.11) * 0.35, sin(a) * r)
 	cam.global_position = pos

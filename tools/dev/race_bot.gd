@@ -62,6 +62,14 @@ func _physics_process(d: float) -> void:
 		_log_t = 0.0
 	if _shots != "" and not _shot_times.is_empty() and race.sim_time > _shot_times[0]:
 		_shot_times.pop_front()
+		if OS.get_environment("BOT_HELMET") != "":
+			race.cameras[0].set_mode(2)
+			for i in 10:
+				await get_tree().process_frame
+		if OS.get_environment("BOT_CRASH") != "":
+			race.bikes[0].physics.crash("test")
+			for i in 30:
+				await get_tree().process_frame
 		if OS.get_environment("BOT_PAUSE") != "":
 			race.set_paused(true)
 			for i in 6:

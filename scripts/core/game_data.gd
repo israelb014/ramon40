@@ -26,7 +26,7 @@ const BIKES := {
 	},
 	"supermoto": {
 		"name": "BIKE_SUPERMOTO", "desc": "BIKE_SUPERMOTO_DESC",
-		"mass": 205.0, "power": 50000.0, "cda": 0.46, "cda_tuck": 0.40,
+		"mass": 205.0, "power": 54000.0, "cda": 0.46, "cda_tuck": 0.40,
 		"launch_accel": 8.2, "grip": 1.18, "max_lean": 50.0, "lean_rate": 3.0,
 		"brake_front": 10.4, "brake_rear": 4.6, "wheelbase": 1.48, "offroad": 0.9,
 		"redline": 10500.0, "idle": 1600.0, "gears": [19.0, 27.0, 35.0, 42.0, 49.0, 56.0],
@@ -35,7 +35,7 @@ const BIKES := {
 	},
 	"cafe": {
 		"name": "BIKE_CAFE", "desc": "BIKE_CAFE_DESC",
-		"mass": 255.0, "power": 64000.0, "cda": 0.40, "cda_tuck": 0.33,
+		"mass": 255.0, "power": 68000.0, "cda": 0.40, "cda_tuck": 0.33,
 		"launch_accel": 7.6, "grip": 1.12, "max_lean": 46.0, "lean_rate": 2.0,
 		"brake_front": 9.0, "brake_rear": 3.6, "wheelbase": 1.45, "offroad": 0.6,
 		"redline": 9000.0, "idle": 950.0, "gears": [22.0, 33.0, 43.0, 51.0, 58.0, 64.0],

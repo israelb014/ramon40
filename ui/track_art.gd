@@ -101,7 +101,7 @@ func _draw_deadsea() -> void:
 
 
 func _draw_jerusalem() -> void:
-	_gradient_rect(Color("050814"), Color("1d2446"), 0.0, 0.55)
+	_gradient_rect(Color("050814"), Color("1d2446"), 0.0, 0.7)
 	for s in _stars:
 		var tw := 0.5 + 0.5 * sin(_t * (1.0 + s.z * 3.0) + s.z * 40.0)
 		draw_circle(Vector2(s.x * size.x, s.y * size.y), 1.2 + s.z, Color(1, 1, 1, 0.3 + 0.6 * tw))
