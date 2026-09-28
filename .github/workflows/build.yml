@@ -6,8 +6,14 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Create this tag (e.g. v1.0.0) on the built commit and publish a GitHub Release"
+        required: false
+        default: ""
 
 env:
+  RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.release_tag }}
   GODOT_VERSION: "4.7.2"
   GODOT_RELEASE: "4.7.2-stable"
 
@@ -76,22 +82,25 @@ jobs:
           path: build/linux/
 
       - name: Zip builds for release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: env.RELEASE_TAG != ''
         run: |
           cd build
-          (cd windows && zip -9 -r ../Ramon40-${GITHUB_REF_NAME}-windows-x64.zip .)
-          (cd linux && zip -9 -r ../Ramon40-${GITHUB_REF_NAME}-linux-x64.zip .)
+          (cd windows && zip -9 -r ../Ramon40-${RELEASE_TAG}-windows-x64.zip .)
+          (cd linux && zip -9 -r ../Ramon40-${RELEASE_TAG}-linux-x64.zip .)
           ls -la
 
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: env.RELEASE_TAG != ''
         uses: softprops/action-gh-release@v2
         with:
-          name: Ramon 40 ${{ github.ref_name }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          target_commitish: ${{ github.sha }}
+          name: Ramon 40 ${{ env.RELEASE_TAG }}
           body_path: RELEASE_NOTES.md
+          make_latest: true
           files: |
-            build/Ramon40-${{ github.ref_name }}-windows-x64.zip
-            build/Ramon40-${{ github.ref_name }}-linux-x64.zip
+            build/Ramon40-${{ env.RELEASE_TAG }}-windows-x64.zip
+            build/Ramon40-${{ env.RELEASE_TAG }}-linux-x64.zip
 
 permissions:
   contents: write

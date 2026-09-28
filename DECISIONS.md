@@ -23,3 +23,4 @@
 - Window close goes through Game so audio playback is released before exit (no leaked instances).
 - Balance: supermoto 54 kW and cafe racer 68 kW keep every bike within about 6% lap time of the sport bike; AI pace 0.82 / 0.90 / 0.965 of the optimal profile for easy / medium / hard with mild rubber-banding (strongest on easy).
 - Windows executable keeps the default Godot icon: changing it needs rcedit on the build machine, which the Linux CI export avoids (application/modify_resources=false).
+- Releases: the build container's git proxy refuses tag pushes, so the workflow also accepts a manual `workflow_dispatch` with `release_tag`; it builds and tests the commit, then creates the tag and the GitHub Release with both zipped builds. Pushing a `v*` tag from a normal machine still works too.
