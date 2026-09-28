@@ -1,0 +1,94 @@
+extends Node
+## Global game flow: holds the current race configuration, the championship session and
+## performs faded scene transitions (optionally through the loading screen).
+
+signal transition_finished
+
+const MAIN_MENU := "res://scenes/main_menu.tscn"
+const RACE := "res://scenes/race.tscn"
+const LOADING := "res://scenes/loading.tscn"
+
+## Race configuration consumed by the race scene.
+## mode: quick | championship | time_trial | split | online
+var race_config: Dictionary = {}
+## Result of the last race (filled by the race scene, read by menus).
+var last_result: Dictionary = {}
+## Menu page to open when returning to the main menu.
+var menu_return_page := ""
+
+var _fade_layer: CanvasLayer
+var _fade: ColorRect
+var _busy := false
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_fade_layer = CanvasLayer.new()
+	_fade_layer.layer = 100
+	add_child(_fade_layer)
+	_fade = ColorRect.new()
+	_fade.color = Color(0.03, 0.02, 0.04, 1.0)
+	_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fade.modulate.a = 0.0
+	_fade_layer.add_child(_fade)
+
+
+func default_config() -> Dictionary:
+	return {
+		"mode": "quick",
+		"track": "ramon",
+		"laps": 3,
+		"difficulty": "medium",
+		"players": [ {"bike": Save.progress.get("selected_bike", "naked"), "name": player_name()} ],
+		"opponents": 7,
+		"ghost": false,
+	}
+
+
+func player_name() -> String:
+	var n: String = Save.progress.get("player_name", "")
+	return n if n != "" else tr("PLAYER_DEFAULT_NAME")
+
+
+func fade_out(time := 0.35) -> void:
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	var tw := create_tween()
+	tw.tween_property(_fade, "modulate:a", 1.0, time)
+	await tw.finished
+
+
+func fade_in(time := 0.45) -> void:
+	var tw := create_tween()
+	tw.tween_property(_fade, "modulate:a", 0.0, time)
+	await tw.finished
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func change_scene(path: String) -> void:
+	if _busy:
+		return
+	_busy = true
+	await fade_out()
+	get_tree().paused = false
+	get_tree().change_scene_to_file(path)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_busy = false
+	await fade_in()
+	transition_finished.emit()
+
+
+func start_race(config: Dictionary) -> void:
+	race_config = config
+	change_scene(LOADING)
+
+
+func go_to_menu(page := "") -> void:
+	menu_return_page = page
+	change_scene(MAIN_MENU)
+
+
+func quit_game() -> void:
+	await fade_out(0.25)
+	get_tree().quit()

@@ -1,0 +1,94 @@
+name: Build
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_RELEASE: "4.7.2-stable"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot-bin
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_RELEASE }}-v2
+
+      - name: Download Godot and export templates
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot-bin ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          cd ~/godot-bin
+          curl -sSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q godot.zip && rm godot.zip
+          mv Godot_v${GODOT_RELEASE}_linux.x86_64 godot
+          curl -sSL -o templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q -j templates.tpz \
+            templates/linux_release.x86_64 templates/linux_debug.x86_64 \
+            templates/windows_release_x86_64.exe templates/windows_debug_x86_64.exe \
+            templates/icudt_godot.dat templates/version.txt \
+            -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          rm templates.tpz
+
+      - name: Put Godot on PATH
+        run: |
+          chmod +x ~/godot-bin/godot
+          echo "$HOME/godot-bin" >> "$GITHUB_PATH"
+
+      - name: Import project
+        run: tools/ci_import.sh
+
+      - name: Run unit tests (GUT)
+        run: tools/ci_test.sh
+
+      - name: Headless smoke run
+        run: tools/ci_smoke.sh
+
+      - name: Export Windows and Linux
+        run: tools/ci_export.sh
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ramon40-windows-x64
+          path: build/windows/
+
+      - name: Upload Linux build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ramon40-linux-x64
+          path: build/linux/
+
+      - name: Zip builds for release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd build
+          (cd windows && zip -9 -r ../Ramon40-${GITHUB_REF_NAME}-windows-x64.zip .)
+          (cd linux && zip -9 -r ../Ramon40-${GITHUB_REF_NAME}-linux-x64.zip .)
+          ls -la
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Ramon 40 ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          files: |
+            build/Ramon40-${{ github.ref_name }}-windows-x64.zip
+            build/Ramon40-${{ github.ref_name }}-linux-x64.zip
+
+permissions:
+  contents: write
